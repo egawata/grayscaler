@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grayscaler</title>
+    <style>
+        video, canvas {
+            max-width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        video {
+            z-index: -1;
+        }
+        canvas {
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <video id="video" autoplay></video>
+    <canvas id="canvas"></canvas>
+<script>
+
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+
+async function startCamera() {
+    try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+        video.srcObject = stream;
+    } catch (err) {
+        console.error("Error: " + err);
+    }
+}
+
+function processVideo() {
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < imageData.data.length; i += 4) {
+        const red = imageData.data[i];
+        const green = imageData.data[i + 1];
+        const blue = imageData.data[i + 2];
+
+        //const v = 0.299 * red + 0.587 * green + 0.114 * blue; // Weighted Average
+        const v = 0.21 * red + 0.72 * green + 0.07 * blue;  // Luminosity
+
+        imageData.data[i] = v; // R
+        imageData.data[i + 1] = v; // G
+        imageData.data[i + 2] = v; // B
+    }
+
+    context.putImageData(imageData, 0, 0);
+
+    requestAnimationFrame(processVideo);
+}
+
+startCamera().then(() => {
+    video.addEventListener('loadedmetadata', () => {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        processVideo();
+    });
+});
+
+</script>
+
+</body>
+</html>
