@@ -28,6 +28,11 @@
 - `...と共有する情報を選択する` という画面が出てきたら、`ウィンドウ` タブから目的のウィンドウを選択して `共有`
 
 
+## オンラインで確認
+
+https://egawata.tokyo/grayscaler でも動作環境を用意しています。使用感を試したい場合はこちらもお使いください。 
+
+
 ## License
 
 Licensed under the Apache 2.0 license. Copyright (c) 2024 by egawata
