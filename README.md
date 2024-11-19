@@ -23,5 +23,10 @@
 - https://raw.githubusercontent.com/egawata/grayscaler/refs/heads/master/grayscaler.html をダウンロード
 - 表示させたいウィンドウをあらかじめ開いておく
 - ダウンロードした `grayscaler.html` をブラウザで開く
+    - ブラウザから追加の権限を求められる場合があります
 - `...と共有する情報を選択する` という画面が出てきたら、`ウィンドウ` タブから目的のウィンドウを選択して `共有`
 
+
+## License
+
+Licensed under the Apache 2.0 license. Copyright (c) 2024 by egawata
