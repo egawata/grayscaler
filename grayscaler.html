@@ -18,16 +18,32 @@
         canvas {
             z-index: 0;
         }
+        .controls {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <video id="video" autoplay></video>
     <canvas id="canvas"></canvas>
+    <div class="controls">
+        <label>
+            <input type="checkbox" id="grayscaleToggle" checked>
+            Grayscale
+        </label>
+    </div>
 <script>
 
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
+const grayscaleToggle = document.getElementById('grayscaleToggle');
 
 async function startCamera() {
     try {
@@ -42,17 +58,19 @@ function processVideo() {
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-    for (let i = 0; i < imageData.data.length; i += 4) {
-        const red = imageData.data[i];
-        const green = imageData.data[i + 1];
-        const blue = imageData.data[i + 2];
+    if (grayscaleToggle.checked) {
+        for (let i = 0; i < imageData.data.length; i += 4) {
+            const red = imageData.data[i];
+            const green = imageData.data[i + 1];
+            const blue = imageData.data[i + 2];
 
-        //const v = 0.299 * red + 0.587 * green + 0.114 * blue; // Weighted Average
-        const v = 0.21 * red + 0.72 * green + 0.07 * blue;  // Luminosity
+            //const v = 0.299 * red + 0.587 * green + 0.114 * blue; // Weighted Average
+            const v = 0.21 * red + 0.72 * green + 0.07 * blue;  // Luminosity
 
-        imageData.data[i] = v; // R
-        imageData.data[i + 1] = v; // G
-        imageData.data[i + 2] = v; // B
+            imageData.data[i] = v; // R
+            imageData.data[i + 1] = v; // G
+            imageData.data[i + 2] = v; // B
+        }
     }
 
     context.putImageData(imageData, 0, 0);
